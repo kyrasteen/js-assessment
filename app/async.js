@@ -7,32 +7,23 @@ exports = (typeof window === 'undefined') ? global : window;
 
 exports.asyncAnswers = {
   async : function(value) {
-    deferred = $.Deferred();
-    setTimeout(function(){
-      deferred.resolve(value);
-    },10)
-    return deferred.promise();
+    var dfd = $.Deferred();
+    setTimeout(function() {
+      dfd.resolve(value);
+    }, 10);
+    return dfd.promise();
   },
 
   manipulateRemoteData : function(url) {
-    var sorted_names = []
-    $.getJSON(url, function(response){
-     var people = response.people;
-     var sorted = people.sort(function(a, b){
-        if(a.name > b.name){
-          return 1;
-        }
-        else if(a.name < b.name){
-          return -1;
-        }
-        else {
-          return 0;
-        }
-      })
-      return sorted.forEach(function(el){
-        return sorted_names.push(el.name);
-      })
-    })
-    return sorted_names
+    var dfd = $.Deferred();
+
+    $.ajax(url).then(function(resp) {
+      var people = $.map(resp.people, function(person) {
+        return person.name;
+      });
+      dfd.resolve(people.sort());
+    });
+
+    return dfd.promise();
   }
 };

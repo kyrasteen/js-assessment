@@ -21,13 +21,12 @@ exports.arraysAnswers = {
   },
 
   removeWithoutCopy : function(arr, item) {
-    var length;
-    arr.forEach(function(el){
-      if (el === item){
-        arr.splice(arr.indexOf(el), 1)
-        length -= 1
+    for(i=0; i<arr.length; i++){
+      if(arr[i] === item){
+        arr.splice(i, 1)
+        i --
       }
-    })
+    }
     return arr;
   },
 
@@ -71,14 +70,19 @@ exports.arraysAnswers = {
   },
 
   duplicates : function(arr) {
-    dups = []
-    arr.forEach(function(el){
-      if(dups.indexOf(el)<0){
-        arr.splice(arr.indexOf(el),1);
-        dups.push(el);
+    var dups = [];
+    sorted = arr.sort();
+
+    function notThere(dups, num) {
+      return dups.indexOf(num) === -1
+    }
+
+    sorted.forEach(function(num){
+      if(num === arr[arr.indexOf(num)+1] && notThere(dups, num)) {
+        dups.push(num);
       }
-    });
-      return dups;
+    })
+    return dups;
   },
 
   square : function(arr) {

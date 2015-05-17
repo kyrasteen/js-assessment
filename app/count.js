@@ -1,11 +1,24 @@
 exports = (typeof window === 'undefined') ? global : window;
 
 exports.countAnswers =  {
+
   count : function (start, end) {
-    setTimeout(function(){
-      for(i=start; i<=end; i++){
-        console.log(i);
+    var timeout;
+
+    function logIt () {
+      console.log(start++);
+
+      if (start <= end) {
+        timeout = setTimeout(logIt, 100);
       }
-    }, 100)
+    }
+
+    logIt();
+
+    return {
+      cancel : function () {
+        clearTimeout(timeout);
+      }
+    };
   }
 };
